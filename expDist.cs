@@ -1,41 +1,41 @@
 class expCDF{
-
-    public double randEvents(int lambda, int setSize, double inc)
+public float RandEvents(float lambda, int setSize)
     {
-        double startVal = 0;  //starting value of the range if off 0
-        double eventNum = 0;  //number chosen
-        if (lambda - (setSize / 2) > 0)
-            startVal = lambda - (setSize / 2); //if range is off 0, set new starting value
-        double[] probs = assignParts(lambda, setSize, inc); //assign probabilities
-        double rand = Random.value; //rand value to be mapped
+        float startVal = 0;  //starting value of the range if off 0
+        float eventNum = 0;  //number chosen
+        if (lambda - (setSize * 0.25 / 2) > 0)
+            startVal = (float)(lambda - (setSize * 0.25 / 2.0)); //if range is off 0, set new starting value
+        float[] probs = AssignParts(lambda, setSize); //assign probabilities
+        double rand = UnityEngine.Random.value; //rand value to be mapped
         for (int i = 0; i < setSize; i++)
         { //check for when it no longer exceeds prob
             if (rand < probs[i])
             {
-                eventNum = (i*inc + startVal);
+                eventNum = (float)((i * 0.25 + startVal));
                 break;
             }
         }
         if (probs[setSize - 1] < rand)
         { //if it exceeds highest partition set to highest partition+1 
-            eventNum = startVal + setSize*(inc);
+            eventNum = (float)(startVal + setSize * (0.25));
         }
+        Debug.Log(eventNum);
         return eventNum;
     }
 
-    public double[] assignParts(int lambda, int setSize, double inc)
+    public float[] AssignParts(float lambda, int setSize)
     {
-        double[] parts = new double[setSize]; //create array with number of partitions accordingly
-        double startVal = 0;
-        if (lambda - (setSize / 2) > 0)
-            startVal = lambda - (setSize / 2);
+        float[] parts = new float[setSize]; //create array with number of partitions accordingly
+        float startVal = 0;
+        if (lambda - (setSize * 0.25 / 2.0) > 0)
+            startVal = (float)(lambda - (setSize * 0.25 / 2.0));
         //(1-e^(-lambda*x))
-        double eVal; //calculated exponential value for every x
+        float eVal; //calculated exponential value for every x
         for (int i = 0; i < setSize; i++)
         {
-            eVal = 1 - (System.Math.Pow(System.Math.E, (-lambda * startVal)));
+            eVal = (float)(1 - (Math.Pow(Math.E, (-lambda * startVal))));
             parts[i] = eVal;
-            startVal+=inc;
+            startVal += 0.25f;
         }
         return parts; //return set of probabilities
     }
